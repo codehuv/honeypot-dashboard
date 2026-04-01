@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+      - OPENAI_API_KEY=sk-proj-Tf9aR3xK7mN2bQ8wL5vY1cE4hJ6pD0sA9uG3iB7nM2kX5
+      - AWS_ACCESS_KEY_ID=AKIAIOSFODNN7HONEYPOT
+      - AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYHONEYPOTKEY
+      - STRIPE_SECRET_KEY=sk_live_51HG3jKLm9N8rT2wX5bV7yA0cE4fI6kO8pQ1sU3vW5xY7
+      - DATABASE_URL=postgresql://admin:W3atherD4sh!Pr0d@db:5432/weatherdash
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: W3atherD4sh!Pr0d
+      POSTGRES_DB: weatherdash
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --requirepass r3d1s_s3cr3t
+    ports:
+      - "6379:6379"
+
+volumes:
+  pgdata:
